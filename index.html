@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <img width="50%" src="img/nodejs.svg" alt="node js logo" />
+          <h1 class="fragment">Lesson 4(5)</h1>
+        </section>
+        <section>
+          <ol>
+            <li class="fragment">AbortController</li>
+            <li class="fragment">Errors</li>
+            <li class="fragment">Cookies</li>
+            <li class="fragment">JWT</li>
+            <li class="fragment">JWT Nest</li>
+          </ol>
+        </section>
+        <section>
+          <h2>AbortController</h2>
+          <p class="fragment">
+          A utility class used to signal cancelation in selected Promise-based APIs. The API is based on the
+          <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController" target="_blank">
+            Web API AbortController.
+          </a>
+          </p>
+        </section>
+        <section>
+          <h2>
+            Errors
+          </h2>
+          <p>how to extend errors</p>
+        </section>
+        <section>
+          <h2>
+            Cookies
+          </h2>
+        </section>
+        <section>
+          Formula
+          <pre><code data-trim>
+Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;
+          </code></pre>
+          <pre class="fragment"><code data-trim>
+HTTP/2.0 200 OK
+Content-Type: text/html
+Set-Cookie: yummy_cookie=choco
+Set-Cookie: tasty_cookie=strawberry
+          </code></pre>
+        </section>
+        <section>
+          <pre>
+            <code>Set-Cookie: id=a3fWa; Expires=Thu, 21 Oct 2021 07:28:00 GMT; Secure; HttpOnly</code>
+          </pre>
+        </section>
+        <section data-background-color="#ffffff">
+          <h2>Auth</h2>
+          <img src="img/ausa.png" alt="">
+        </section>
+        <section>
+          <h2>Sessions using cookies</h2>
+        </section>
+        <section>
+          <h2>
+            JWT
+          </h2>
+        </section>
+        <section data-background-color="#ffffff">
+          <img src="img/jwt.png" alt="">
+        </section>
+        <section>
+          <h2>
+            NestJS
+          </h2>
+        </section>
+        <section>
+          <pre><code>
+import { Controller, Get } from '@nestjs/common';
+
+@Controller('cats')
+export class CatsController {
+  @Get()
+  findAll(): string {
+    return 'This action returns all cats';
+  }
+}
+          </code></pre>
+        </section>
+        <section>
+          <pre><code>
+import { Injectable } from '@nestjs/common';
+import { Cat } from './interfaces/cat.interface';
+
+@Injectable()
+export class CatsService {
+  private readonly cats: Cat[] = [];
+
+  create(cat: Cat) {
+    this.cats.push(cat);
+  }
+
+  findAll(): Cat[] {
+    return this.cats;
+  }
+}
+          </code></pre>
+        </section>
+        <section>
+          <pre><code>
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise&lt;boolean&gt; | Observable&lt;boolean&gt; {
+    const request = context.switchToHttp().getRequest();
+    return validateRequest(request);
+  }
+}
+          </code></pre>
+        </section>
+        <section>
+          <h3>Local usage</h3>
+          <pre><code data-trim>
+@Controller('cats')
+@UseGuards(AuthGuard)
+export class CatsController {}
+          </code></pre>
+          <h3>Global usage</h3>
+          <pre><code data-trim>
+const app = await NestFactory.create(AppModule);
+app.useGlobalGuards(new RolesGuard());
+          </code></pre>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
